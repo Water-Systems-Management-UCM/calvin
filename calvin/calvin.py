@@ -237,8 +237,8 @@ class CALVIN():
     model.k = Set(initialize=range(15))
     model.A = Set(within=model.N*model.N*model.k, 
                   initialize=self.links, ordered=True)
-    model.source = Param(initialize='SOURCE')
-    model.sink = Param(initialize='SINK')
+    model.source = Param(initialize='SOURCE', within=Reals)
+    model.sink = Param(initialize='SINK', within=Reals)
 
     def init_params(p):
       if p == 'cost' and debug_mode:
@@ -248,10 +248,10 @@ class CALVIN():
       else:
         return lambda model,i,j,k: df.loc[str(i)+'_'+str(j)+'_'+str(k)][p]
 
-    model.u = Param(model.A, initialize=init_params('upper_bound'), mutable=True)
-    model.l = Param(model.A, initialize=init_params('lower_bound'), mutable=True)
-    model.a = Param(model.A, initialize=init_params('amplitude'))
-    model.c = Param(model.A, initialize=init_params('cost'))
+    model.u = Param(model.A, initialize=init_params('upper_bound'), within=Reals, mutable=True)
+    model.l = Param(model.A, initialize=init_params('lower_bound'), within=Reals, mutable=True)
+    model.a = Param(model.A, initialize=init_params('amplitude'), within=Reals)
+    model.c = Param(model.A, initialize=init_params('cost'), within=Reals)
 
     # The flow over each arc
     model.X = Var(model.A, within=Reals)
